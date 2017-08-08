@@ -28,20 +28,19 @@
         @if(auth()->check())
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <form action="{{$thread->}}" method="post" role="form">
-                        <legend>Form Title</legend>
-
+                    <form action="{{$thread->path() . '/replies'}}" method="post" role="form">
+                        {{csrf_field()}}
                         <div class="form-group">
-                            <label for=""></label>
-                            <input type="text" class="form-control" name="" id="" placeholder="Input...">
+                            <label for="body"></label>
+                            <textarea name="body" id="body" class="form-control" placeholder="Have Something to say?" rows="5"></textarea>
                         </div>
-
-                        
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Add Reply</button>
                     </form>
                 </div>
             </div>
+        @else
+            <p class="text-center">Please <a href="{{route('login')}}">Sign In</a> in order to participate in discussion</p>
+
         @endif
     </div>
 @endsection
