@@ -21,13 +21,13 @@ class ParticipateInForumTest extends TestCase
 
         //Given we have authenticated user
 //      $user = factory('App\User')->create();
-        $this->be($user = factory('App\User')->create()); //authenticated
+        $this->be($user = create('App\User')); //authenticated
 
         //And an existing thread
-        $thread = factory('App\Thread')->create();
+        $thread = create('App\Thread');
 
         //When the user adds reply to the thread
-        $reply = factory('App\Reply')->make(); //make a reply in memory instead of create() creating it in database.
+        $reply = make('App\Reply'); //make a reply in memory instead of create() creating it in database.
         $this->post($thread->path().'/replies', $reply->toArray()); //$this->post is a POST request o server, stimulating user clicking reply button which will send POST request to server
 
         //Then their reply should be visible on the page

@@ -14,7 +14,7 @@ class CreateThreadsTest extends TestCase
 
         $this->expectException('Illuminate\Auth\AuthenticationException');
 
-        $thread = factory('App\Thread')->make(); //can also use raw() if instance not needed.
+        $thread = make('App\Thread'); //can also use raw() if instance not needed.
 
         $this->post('/threads', $thread->toArray());
     }
@@ -24,11 +24,11 @@ class CreateThreadsTest extends TestCase
     {
         // give we have signed in user
 
-        $this->actingAs(factory('App\User')->create());
+        $this->signedIn();
 
         // When we hit endpoint to create thread
 
-        $thread = factory('App\Thread')->make(); //can also use raw() if instance not needed.
+        $thread = make('App\Thread'); //can also use raw() if instance not needed.
 
         $this->post('/threads', $thread->toArray());
 
