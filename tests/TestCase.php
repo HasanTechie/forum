@@ -2,16 +2,52 @@
 
 namespace Tests;
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use App\Exceptions\Handler;
+
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function signedIn($user = null){
+    protected function setUp(){
+        parent::setUp();
+        $this->disableExceptionHandling();
+    }
 
-        $user = $user ?: create('App\User'); //example of ?: is $action = (empty($_POST['action'])) ? 'default' : $_POST['action'];
+    protected function signedIn($user = null)
+    {
+
+        $user = $user ?: create('App\User'); //if we have user that should be authenticated then you can pass that through or otherwise we can create one
 
         $this->actingAs($user);
+    }
+
+    protected function disableExceptionHandling()
+    {
+        $this->oldExceptionHandler = $this->app->make(ExceptionHandler::class);
+
+        $this->app->instance(ExceptionHandler::class, new class extends Handler
+        {
+            public function __construct()
+            {
+            }
+
+            public function report(\Exception $e)
+            {
+            }
+
+            public function render($request, \Exception $e)
+            {
+                throw $e;
+            }
+        });
+    }
+
+    protected function withExceptionHandling()
+    {
+        $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
+        return $this;
     }
 }
