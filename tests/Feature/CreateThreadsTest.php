@@ -12,18 +12,19 @@ class CreateThreadsTest extends TestCase
     /** @test */
     public function guests_may_not_create_threads(){
 
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withExceptionHandling();
 
-        $thread = make('App\Thread'); //can also use raw() if instance not needed.
+        $this->post('/threads')
+             ->assertRedirect('/login');
 
-        $this->post('/threads', $thread->toArray());
-    }
+        $this->get('/threads/create') //public function guests_cannot_see_the_create_threads_page(){
+             ->assertRedirect('/login');
 
-    /** @test */
-    public function guests_cannot_see_the_create_threads_page(){
-        $this->withExceptionHandling()
-            ->get('/threads/create')
-            ->assertRedirect('/login');
+//        $this->expectException('Illuminate\Auth\AuthenticationException');
+//
+//        $thread = make('App\Thread'); //can also use raw() if instance not needed.
+//
+//        $this->post('/threads', $thread->toArray());
     }
 
     /** @test */
@@ -35,7 +36,7 @@ class CreateThreadsTest extends TestCase
 
         // When we hit endpoint to create thread
 
-        $thread = make('App\Thread'); //can also use raw() if instance not needed.
+        $thread = create('App\Thread'); //can also use raw() if instance not needed.
 
         $this->post('/threads', $thread->toArray());
 
